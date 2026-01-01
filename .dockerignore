@@ -1,0 +1,8 @@
+# Created Docker files - do not commit credentials
+token.json
+credentials.json
+
+# Environment files with secrets
+.env
+.env.local
+.env.*.local

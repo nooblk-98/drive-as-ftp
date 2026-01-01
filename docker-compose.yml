@@ -1,0 +1,40 @@
+version: '3.8'
+
+services:
+  gdrive-ftp:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: gdrive-ftp-server
+    image: gdrive-ftp:latest
+    ports:
+      # FTP control port
+      - "2121:2121"
+    volumes:
+      # Mount credentials and token files
+      - ./credentials.json:/app/credentials.json:ro
+      # Mount config directory for .env or config files
+      - ./config:/app/config
+      # Mount logs directory to persist logs
+      - ./logs:/app/logs
+    environment:
+      # FTP Server Configuration (override via .env file if needed)
+      - FTP_HOST=0.0.0.0
+      - FTP_PORT=21
+      - FTP_USERNAME=gdrive
+      - FTP_PASSWORD=gdrive123
+      - FTP_ROOT_PATH=/
+      - FTP_MAX_CONNECTIONS=256
+      - FTP_MAX_CONNECTIONS_PER_IP=5
+      # Logging
+      - LOG_LEVEL=INFO
+      - LOG_FILE=/app/logs/gdrive-ftp.log
+      # Cache timeout in seconds
+      - CACHE_TIMEOUT=300
+    restart: unless-stopped
+    networks:
+      - gdrive-ftp-network
+
+networks:
+  gdrive-ftp-network:
+    driver: bridge
