@@ -18,7 +18,7 @@ services:
     environment:
       # FTP Server Configuration (override via .env file if needed)
       - FTP_HOST=0.0.0.0
-      - FTP_PORT=21
+      - FTP_PORT=2121
       - FTP_USERNAME=gdrive
       - FTP_PASSWORD=gdrive123
       - FTP_ROOT_PATH=/
@@ -29,6 +29,10 @@ services:
       - LOG_FILE=/app/logs/gdrive-ftp.log
       # Cache timeout in seconds
       - CACHE_TIMEOUT=300
+      # OAuth flow control (force console auth in Docker)
+      - OAUTH_CONSOLE=true
+    stdin_open: true
+    tty: true
     restart: unless-stopped
     networks:
       - gdrive-ftp-network

@@ -44,7 +44,21 @@ class GoogleDriveAuth:
                     )
                 flow = InstalledAppFlow.from_client_secrets_file(
                     self.credentials_file, SCOPES)
-                self.creds = flow.run_local_server(port=0)
+                use_console = os.getenv('OAUTH_CONSOLE', '').lower() in ('1', 'true', 'yes')
+                if use_console:
+                    # Older google-auth-oauthlib may not support run_console().
+                    # run_local_server(open_browser=False) still prints the auth URL.
+                    self.creds = flow.run_local_server(port=0, open_browser=False)
+                else:
+                    try:
+                        self.creds = flow.run_local_server(port=0)
+                    except Exception as exc:
+                        print(
+                            "Local browser authentication failed, "
+                            "falling back to console flow."
+                        )
+                        print(f"Reason: {exc}")
+                        self.creds = flow.run_local_server(port=0, open_browser=False)
             
             # Save the credentials for the next run
             with open(self.token_file, 'wb') as token:
