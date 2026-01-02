@@ -25,7 +25,6 @@ Direct install:
 curl -fsSL "https://raw.githubusercontent.com/nooblk-98/drive-as-ftp/refs/heads/main/scripts/install.sh" | sudo bash
 
 ```
-```
 
 ### 3. Set up Google Drive API
 
@@ -49,30 +48,6 @@ Use the menu to edit settings (recommended):
 ```bash
 drivesftp
 # then choose: 6) Settings (.env)
-```
-
-If you need to edit manually, use `.env` based on `.env.example` and include these keys:
-```
-# SFTP Server Configuration
-SFTP_HOST=0.0.0.0
-SFTP_PORT=2121
-SFTP_USERNAME=admin
-SFTP_PASSWORD=admin123
-SFTP_ROOT_PATH=/
-SFTP_HOST_KEY=config/sftp_host_key
-
-# Google Drive Settings
-CREDENTIALS_FILE=credentials.json
-TOKEN_FILE=token.json
-OAUTH_CONSOLE=true
-
-# Logging Settings
-LOG_LEVEL=INFO
-LOG_FILE=logs/sftp_server.log
-
-# Performance Settings
-CACHE_ENABLED=true
-CACHE_TIMEOUT=60
 ```
 
 ## Usage
