@@ -33,6 +33,14 @@ cd drive-as-ftp
 pip install -r requirements.txt
 ```
 
+If you see `error: externally-managed-environment` (PEP 668), install inside a virtual environment:
+
+```bash
+python3 -m venv .venv
+source .venv/bin/activate
+pip install -r requirements.txt
+```
+
 ### 3. Set up Google Drive API
 
 1. Go to [Google Cloud Console](https://console.cloud.google.com/)
@@ -68,6 +76,7 @@ pip install -r requirements.txt
    # Google Drive Settings
    CREDENTIALS_FILE=credentials.json
    TOKEN_FILE=token.json
+   OAUTH_CONSOLE=true
 
    # Logging Settings
    LOG_LEVEL=INFO
@@ -87,6 +96,8 @@ python main.py
 ```
 
 On the first run, a browser window will open asking you to authorize the application to access your Google Drive. After authorization, a `token.json` file will be created for future sessions.
+
+If you're running on a remote server, keep `OAUTH_CONSOLE=true` so the app prints an authorization URL and prompts for the code in the terminal.
 
 ### Connect with an FTP client
 
