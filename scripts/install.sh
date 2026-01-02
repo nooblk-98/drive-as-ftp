@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-APP_NAME="driveftp"
+APP_NAME="drivesftp"
 APP_DIR="${APP_DIR:-/opt/drive-as-ftp}"
 SERVICE_USER="${SERVICE_USER:-driveftp}"
 VENV_DIR="$APP_DIR/.venv"
@@ -83,7 +83,7 @@ cat > "$MENU_BIN" <<'EOF'
 #!/usr/bin/env bash
 set -euo pipefail
 
-APP_NAME="driveftp"
+APP_NAME="drivesftp"
 APP_DIR="/opt/drive-as-ftp"
 SERVICE_FILE="/etc/systemd/system/${APP_NAME}.service"
 VENV_DIR="$APP_DIR/.venv"
@@ -111,7 +111,12 @@ auth_only() {
 
 while true; do
   echo ""
-  echo "DriveSFTP menu"
+  if run_root systemctl is-active --quiet "$APP_NAME"; then
+    status="active"
+  else
+    status="inactive"
+  fi
+  echo "DriveSFTP menu (service: $status)"
   echo "1) Start service"
   echo "2) Stop service"
   echo "3) Authenticate (console)"

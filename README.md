@@ -100,7 +100,7 @@ If you're running on a remote server, keep `OAUTH_CONSOLE=true` so the app print
 
 ## Install as a Linux service (systemd)
 
-This installs the app under `/opt/drive-as-ftp`, creates a `driveftp` system user, and registers a `driveftp` service.
+This installs the app under `/opt/drive-as-ftp`, creates a `driveftp` system user, and registers a `drivesftp` service.
 
 ```bash
 sudo bash scripts/install.sh
@@ -120,7 +120,7 @@ Copy your `credentials.json` into `/opt/drive-as-ftp` before using the Authentic
 After installation, run the menu:
 
 ```bash
-driveftp
+drivesftp
 ```
 
 Menu options include start/stop, authenticate, status, logs, settings, update, reinstall, and uninstall.
