@@ -50,6 +50,7 @@ class GoogleDriveAuth:
                     if hasattr(flow, 'run_console'):
                         self.creds = flow.run_console()
                     else:
+                        flow.redirect_uri = 'urn:ietf:wg:oauth:2.0:oob'
                         auth_url, _ = flow.authorization_url(prompt='consent')
                         print("Open this URL in your browser and authorize the app:")
                         print(auth_url)
