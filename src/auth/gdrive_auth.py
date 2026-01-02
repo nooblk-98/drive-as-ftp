@@ -46,9 +46,16 @@ class GoogleDriveAuth:
                     self.credentials_file, SCOPES)
                 use_console = os.getenv('OAUTH_CONSOLE', '').lower() in ('1', 'true', 'yes')
                 if use_console:
-                    # Older google-auth-oauthlib may not support run_console().
-                    # run_local_server(open_browser=False) still prints the auth URL.
-                    self.creds = flow.run_local_server(port=0, open_browser=False)
+                    # Prefer console flow for remote servers to avoid localhost redirects.
+                    if hasattr(flow, 'run_console'):
+                        self.creds = flow.run_console()
+                    else:
+                        auth_url, _ = flow.authorization_url(prompt='consent')
+                        print("Open this URL in your browser and authorize the app:")
+                        print(auth_url)
+                        code = input("Enter the authorization code: ").strip()
+                        flow.fetch_token(code=code)
+                        self.creds = flow.credentials
                 else:
                     try:
                         self.creds = flow.run_local_server(port=0)
