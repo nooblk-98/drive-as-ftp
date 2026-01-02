@@ -106,7 +106,7 @@ run_as_service_user() {
 }
 
 auth_only() {
-  run_as_service_user "cd $APP_DIR && OAUTH_CONSOLE=true $VENV_DIR/bin/python - <<'PY'\nfrom src.auth import GoogleDriveAuth\nfrom src.utils.config import Config\ncfg = Config()\nauth = GoogleDriveAuth(cfg.credentials_file, cfg.token_file)\nauth.authenticate()\nprint('Authentication complete')\nPY"
+  run_as_service_user "cd $APP_DIR && OAUTH_CONSOLE=true $VENV_DIR/bin/python -c \"from src.auth import GoogleDriveAuth; from src.utils.config import Config; cfg = Config(); auth = GoogleDriveAuth(cfg.credentials_file, cfg.token_file); auth.authenticate(); print('Authentication complete')\""
 }
 
 while true; do
