@@ -40,12 +40,21 @@ if [[ -f "./requirements.txt" ]]; then
       | tar -xf - -C "$APP_DIR"
   fi
 else
+  if ! command -v git >/dev/null 2>&1; then
+    echo "git is required for direct install. Install git and re-run."
+    exit 1
+  fi
   if [[ -d "$APP_DIR/.git" ]]; then
     git -C "$APP_DIR" pull --ff-only
   else
     rm -rf "$APP_DIR"
     git clone "$REPO_URL" "$APP_DIR"
   fi
+fi
+
+if [[ ! -f "$APP_DIR/requirements.txt" ]]; then
+  echo "requirements.txt not found in $APP_DIR. Clone or copy failed."
+  exit 1
 fi
 
 python3 -m venv "$VENV_DIR"
