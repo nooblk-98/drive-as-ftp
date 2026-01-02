@@ -71,7 +71,9 @@ def main():
             config.ftp_password,
             gdrive_service,
             cache_timeout=config.cache_timeout,
-            root_path=config.ftp_root_path
+            root_path=config.ftp_root_path,
+            passive_address=config.ftp_passive_address,
+            passive_ports=config.ftp_passive_ports
         )
         
         # Set server limits

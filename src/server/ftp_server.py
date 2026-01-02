@@ -249,7 +249,17 @@ class GoogleDriveFTPFilesystem(AbstractedFS):
         pass
 
 
-def create_ftp_server(host, port, username, password, gdrive_service, cache_timeout=30, root_path='/'):
+def create_ftp_server(
+    host,
+    port,
+    username,
+    password,
+    gdrive_service,
+    cache_timeout=30,
+    root_path='/',
+    passive_address=None,
+    passive_ports=None,
+):
     """Create and configure FTP server"""
     
     # Create Google Drive filesystem with caching and root path
@@ -288,6 +298,10 @@ def create_ftp_server(host, port, username, password, gdrive_service, cache_time
                 self.log(f"Failed to cleanup temp file {file}: {exc}")
     
     CustomHandler.authorizer = authorizer
+    if passive_address:
+        CustomHandler.masquerade_address = passive_address
+    if passive_ports:
+        CustomHandler.passive_ports = passive_ports
     
     # Create server
     server = FTPServer((host, port), CustomHandler)

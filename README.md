@@ -72,6 +72,9 @@ pip install -r requirements.txt
    FTP_PASSWORD=admin123
    FTP_MAX_CONNECTIONS=256
    FTP_MAX_CONNECTIONS_PER_IP=5
+   # For remote servers behind NAT
+   FTP_PASSIVE_ADDRESS=your.public.ip
+   FTP_PASSIVE_PORTS=30000-30100
 
    # Google Drive Settings
    CREDENTIALS_FILE=credentials.json
@@ -221,6 +224,10 @@ Check that your Google Cloud project has the Google Drive API enabled and your O
 ### FTP connection refused
 - Check that the port (default 2121) is not blocked by your firewall
 - Verify the FTP_HOST and FTP_PORT settings in your `.env` file
+
+### "Server sent passive reply with unroutable address"
+Set `FTP_PASSIVE_ADDRESS` to your public IP (or DNS name) and open the
+`FTP_PASSIVE_PORTS` range in your firewall/security group.
 
 ## Contributing
 

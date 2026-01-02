@@ -21,6 +21,10 @@ class Config:
         self.ftp_max_connections = int(os.getenv('FTP_MAX_CONNECTIONS', '256'))
         self.ftp_max_connections_per_ip = int(os.getenv('FTP_MAX_CONNECTIONS_PER_IP', '5'))
         self.ftp_root_path = os.getenv('FTP_ROOT_PATH', '/').strip()
+        self.ftp_passive_address = os.getenv('FTP_PASSIVE_ADDRESS', '').strip() or None
+        self.ftp_passive_ports = self._parse_passive_ports(
+            os.getenv('FTP_PASSIVE_PORTS', '').strip()
+        )
         
         # Google Drive Settings
         self.credentials_file = os.getenv('CREDENTIALS_FILE', 'credentials.json')
@@ -33,6 +37,22 @@ class Config:
         # Performance Settings
         self.cache_enabled = os.getenv('CACHE_ENABLED', 'true').lower() == 'true'
         self.cache_timeout = int(os.getenv('CACHE_TIMEOUT', '60'))
+
+    def _parse_passive_ports(self, value):
+        """Parse passive port range like '30000-30100'."""
+        if not value:
+            return None
+        parts = value.split('-', 1)
+        if len(parts) != 2:
+            return None
+        try:
+            start = int(parts[0])
+            end = int(parts[1])
+        except ValueError:
+            return None
+        if start < 1 or end > 65535 or start > end:
+            return None
+        return range(start, end + 1)
     
     def validate(self):
         """Validate configuration"""
@@ -58,6 +78,10 @@ class Config:
         print(f"  Root Path: {self.ftp_root_path}")
         print(f"  Max Connections: {self.ftp_max_connections}")
         print(f"  Max Connections Per IP: {self.ftp_max_connections_per_ip}")
+        if self.ftp_passive_address:
+            print(f"  Passive Address: {self.ftp_passive_address}")
+        if self.ftp_passive_ports:
+            print(f"  Passive Ports: {self.ftp_passive_ports.start}-{self.ftp_passive_ports.stop - 1}")
         print(f"\nGoogle Drive Configuration:")
         print(f"  Credentials File: {self.credentials_file}")
         print(f"  Token File: {self.token_file}")
