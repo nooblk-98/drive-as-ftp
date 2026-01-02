@@ -19,25 +19,12 @@ A Python application that creates an SFTP server interface for your Google Drive
 
 ## Installation
 
-### 1. Clone the repository
+Direct install:
 
 ```bash
-git clone https://github.com/yourusername/drive-as-ftp.git
-cd drive-as-ftp
+curl -fsSL "https://raw.githubusercontent.com/nooblk-98/drive-as-ftp/refs/heads/main/scripts/install.sh" | sudo bash
+
 ```
-
-### 2. Install dependencies
-
-```bash
-pip install -r requirements.txt
-```
-
-If you see `error: externally-managed-environment` (PEP 668), install inside a virtual environment:
-
-```bash
-python3 -m venv .venv
-source .venv/bin/activate
-pip install -r requirements.txt
 ```
 
 ### 3. Set up Google Drive API
@@ -57,34 +44,36 @@ pip install -r requirements.txt
 
 ### 4. Configure the application
 
-1. Copy the example environment file:
-   ```bash
-   cp .env.example .env
-   ```
+Use the menu to edit settings (recommended):
 
-2. Edit `.env` and configure your settings:
-   ```
-   # SFTP Server Configuration
-   SFTP_HOST=0.0.0.0
-   SFTP_PORT=2121
-   SFTP_USERNAME=admin
-   SFTP_PASSWORD=admin123
-   SFTP_ROOT_PATH=/
-   SFTP_HOST_KEY=config/sftp_host_key
+```bash
+drivesftp
+# then choose: 6) Settings (.env)
+```
 
-   # Google Drive Settings
-   CREDENTIALS_FILE=credentials.json
-   TOKEN_FILE=token.json
-   OAUTH_CONSOLE=true
+If you need to edit manually, use `.env` based on `.env.example` and include these keys:
+```
+# SFTP Server Configuration
+SFTP_HOST=0.0.0.0
+SFTP_PORT=2121
+SFTP_USERNAME=admin
+SFTP_PASSWORD=admin123
+SFTP_ROOT_PATH=/
+SFTP_HOST_KEY=config/sftp_host_key
 
-   # Logging Settings
-   LOG_LEVEL=INFO
-   LOG_FILE=logs/sftp_server.log
+# Google Drive Settings
+CREDENTIALS_FILE=credentials.json
+TOKEN_FILE=token.json
+OAUTH_CONSOLE=true
 
-   # Performance Settings
-   CACHE_ENABLED=true
-   CACHE_TIMEOUT=60
-   ```
+# Logging Settings
+LOG_LEVEL=INFO
+LOG_FILE=logs/sftp_server.log
+
+# Performance Settings
+CACHE_ENABLED=true
+CACHE_TIMEOUT=60
+```
 
 ## Usage
 
