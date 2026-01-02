@@ -7,6 +7,7 @@ SERVICE_USER="${SERVICE_USER:-driveftp}"
 VENV_DIR="$APP_DIR/.venv"
 SERVICE_FILE="/etc/systemd/system/${APP_NAME}.service"
 MENU_BIN="/usr/local/bin/${APP_NAME}"
+REPO_URL="${REPO_URL:-https://github.com/nooblk-98/drive-as-ftp.git}"
 
 if [[ $EUID -ne 0 ]]; then
   echo "Please run as root: sudo bash scripts/install.sh"
@@ -24,18 +25,27 @@ fi
 
 mkdir -p "$APP_DIR" "$APP_DIR/logs"
 
-if command -v rsync >/dev/null 2>&1; then
-  rsync -a \
-    --exclude .git \
-    --exclude .venv \
-    --exclude logs \
-    --exclude token.json \
-    --exclude credentials.json \
-    ./ "$APP_DIR/"
+if [[ -f "./requirements.txt" ]]; then
+  if command -v rsync >/dev/null 2>&1; then
+    rsync -a \
+      --exclude .git \
+      --exclude .venv \
+      --exclude logs \
+      --exclude token.json \
+      --exclude credentials.json \
+      ./ "$APP_DIR/"
+  else
+    tar --exclude='.git' --exclude='.venv' --exclude='logs' \
+        --exclude='token.json' --exclude='credentials.json' -cf - . \
+      | tar -xf - -C "$APP_DIR"
+  fi
 else
-  tar --exclude='.git' --exclude='.venv' --exclude='logs' \
-      --exclude='token.json' --exclude='credentials.json' -cf - . \
-    | tar -xf - -C "$APP_DIR"
+  if [[ -d "$APP_DIR/.git" ]]; then
+    git -C "$APP_DIR" pull --ff-only
+  else
+    rm -rf "$APP_DIR"
+    git clone "$REPO_URL" "$APP_DIR"
+  fi
 fi
 
 python3 -m venv "$VENV_DIR"

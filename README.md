@@ -113,6 +113,8 @@ Direct install:
 curl -fsSL https://raw.githubusercontent.com/nooblk-98/drive-as-ftp/refs/heads/main/scripts/install.sh | sudo bash
 ```
 
+Note: the direct install uses `git` to clone the repo on the server.
+
 Copy your `credentials.json` into `/opt/drive-as-ftp` before using the Authenticate menu option.
 
 After installation, run the menu:
