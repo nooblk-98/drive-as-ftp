@@ -1,16 +1,15 @@
-# Google Drive as FTP Server
+# Google Drive as SFTP Server
 
-A Python application that creates an FTP server interface for your Google Drive, allowing you to access and manage your Google Drive files using any FTP client.
+A Python application that creates an SFTP server interface for your Google Drive, allowing you to access and manage your Google Drive files using any SFTP client.
 
 ## Features
 
-- 🔐 Secure Google Drive authentication using OAuth2
-- 📁 Browse Google Drive files and folders via FTP
-- ⬆️ Upload files to Google Drive through FTP
-- ⬇️ Download files from Google Drive through FTP
-- ✏️ Rename and delete files/folders
-- 📂 Create new folders
-- 🔄 Standard FTP operations (LIST, RETR, STOR, DELE, etc.)
+- Secure Google Drive authentication using OAuth2
+- Browse Google Drive files and folders via SFTP
+- Upload files to Google Drive through SFTP
+- Download files from Google Drive through SFTP
+- Rename and delete files/folders
+- Create new folders
 
 ## Prerequisites
 
@@ -65,16 +64,13 @@ pip install -r requirements.txt
 
 2. Edit `.env` and configure your settings:
    ```
-   # FTP Server Configuration
-   FTP_HOST=0.0.0.0
-   FTP_PORT=2121
-   FTP_USERNAME=admin
-   FTP_PASSWORD=admin123
-   FTP_MAX_CONNECTIONS=256
-   FTP_MAX_CONNECTIONS_PER_IP=5
-   # For remote servers behind NAT
-   FTP_PASSIVE_ADDRESS=your.public.ip
-   FTP_PASSIVE_PORTS=30000-30100
+   # SFTP Server Configuration
+   SFTP_HOST=0.0.0.0
+   SFTP_PORT=2121
+   SFTP_USERNAME=admin
+   SFTP_PASSWORD=admin123
+   SFTP_ROOT_PATH=/
+   SFTP_HOST_KEY=config/sftp_host_key
 
    # Google Drive Settings
    CREDENTIALS_FILE=credentials.json
@@ -83,7 +79,7 @@ pip install -r requirements.txt
 
    # Logging Settings
    LOG_LEVEL=INFO
-   LOG_FILE=logs/ftp_server.log
+   LOG_FILE=logs/sftp_server.log
 
    # Performance Settings
    CACHE_ENABLED=true
@@ -92,7 +88,7 @@ pip install -r requirements.txt
 
 ## Usage
 
-### Start the FTP server
+### Start the SFTP server
 
 ```bash
 python main.py
@@ -129,20 +125,20 @@ driveftp
 
 Menu options include start/stop, authenticate, status, logs, settings, update, reinstall, and uninstall.
 
-### Connect with an FTP client
+### Connect with an SFTP client
 
-You can use any FTP client (FileZilla, WinSCP, command-line ftp, etc.) with these settings:
+You can use any SFTP client (FileZilla, WinSCP, command-line sftp, etc.) with these settings:
 
 - **Host:** `localhost` (or your server IP)
 - **Port:** `2121` (or the port you configured)
 - **Username:** `admin` (or the username you configured)
 - **Password:** `admin123` (or the password you configured)
-- **Protocol:** FTP (not FTPS or SFTP)
+- **Protocol:** SFTP
 
-#### Example using command-line FTP:
+#### Example using command-line SFTP:
 
 ```bash
-ftp localhost 2121
+sftp -P 2121 admin@localhost
 # Enter username and password when prompted
 ```
 
@@ -165,9 +161,9 @@ drive-as-ftp/
 │   ├── filesystem/                   # Filesystem module
 │   │   ├── __init__.py
 │   │   └── gdrive_filesystem.py     # Google Drive filesystem operations
-│   ├── server/                       # FTP Server module
+│   ├── server/                       # SFTP Server module
 │   │   ├── __init__.py
-│   │   └── ftp_server.py            # FTP server implementation
+│   │   └── sftp_server.py            # SFTP server implementation
 │   └── utils/                        # Utility modules
 │       ├── __init__.py
 │       ├── config.py                # Configuration management
@@ -183,8 +179,8 @@ drive-as-ftp/
 ## How It Works
 
 1. **Authentication:** The application uses OAuth2 to authenticate with Google Drive API
-2. **FTP Server:** A custom FTP server is created using `pyftpdlib`
-3. **Filesystem Bridge:** The `GoogleDriveFTPFilesystem` class translates FTP operations to Google Drive API calls
+2. **SFTP Server:** A custom SFTP server is created using `paramiko`
+3. **Filesystem Bridge:** The filesystem wrapper translates SFTP operations to Google Drive API calls
 4. **File Operations:** 
    - Downloads are streamed from Google Drive
    - Uploads use temporary files before uploading to Google Drive
@@ -194,9 +190,9 @@ drive-as-ftp/
 
 ⚠️ **Important Security Considerations:**
 
-- The default FTP protocol is **not encrypted**. Data is transmitted in plain text.
+- SFTP runs over SSH and is encrypted in transit.
 - For production use, consider:
-  - Using FTPS (FTP over SSL/TLS)
+  - Using SSH keys for authentication
   - Implementing strong passwords
   - Restricting access by IP address
   - Running behind a VPN or firewall
@@ -207,7 +203,7 @@ drive-as-ftp/
 
 - Google Docs, Sheets, and Slides cannot be downloaded directly (they're Google-native formats)
 - Large file uploads/downloads may take time
-- FTP connections are not encrypted by default
+- SFTP is encrypted, but Google Drive API rate limits still apply
 - Rate limits apply based on Google Drive API quotas
 
 ## Troubleshooting
@@ -221,13 +217,10 @@ The application will print a URL in the console. Copy and paste it into your bro
 ### "Permission denied" errors
 Check that your Google Cloud project has the Google Drive API enabled and your OAuth consent screen is properly configured.
 
-### FTP connection refused
+### SFTP connection refused
 - Check that the port (default 2121) is not blocked by your firewall
-- Verify the FTP_HOST and FTP_PORT settings in your `.env` file
+- Verify the SFTP_HOST and SFTP_PORT settings in your `.env` file
 
-### "Server sent passive reply with unroutable address"
-Set `FTP_PASSIVE_ADDRESS` to your public IP (or DNS name) and open the
-`FTP_PASSIVE_PORTS` range in your firewall/security group.
 
 ## Contributing
 

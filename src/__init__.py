@@ -1,5 +1,5 @@
 """
-Source package for Google Drive FTP Server
+Source package for Google Drive SFTP Server
 """
 
 __version__ = '1.0.0'

@@ -1,5 +1,5 @@
 """
-Logging module for Google Drive FTP Server
+Logging module for Google Drive SFTP Server
 """
 
 import os
@@ -7,7 +7,7 @@ import logging
 from logging.handlers import RotatingFileHandler
 
 
-def setup_logger(name='gdrive-ftp', log_file='logs/ftp_server.log', log_level='INFO'):
+def setup_logger(name='gdrive-sftp', log_file='logs/sftp_server.log', log_level='INFO'):
     """
     Setup logger with file and console handlers
     

@@ -1,5 +1,5 @@
 """
-Google Drive Filesystem for FTP
+Google Drive Filesystem
 Implements filesystem operations for Google Drive
 """
 
@@ -41,7 +41,7 @@ class GoogleDriveFileSystem:
         raise ValueError(f"Root path '{self.root_path}' not found or is not a folder")
     
     def _translate_path(self, path):
-        """Translate FTP path to actual Google Drive path"""
+        """Translate SFTP path to actual Google Drive path"""
         if not self.root_path:
             return path
         

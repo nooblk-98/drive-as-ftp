@@ -1,18 +1,18 @@
 """
-Google Drive as FTP Server
+Google Drive as SFTP Server
 Main application entry point
 """
 
 import sys
 from src.auth import GoogleDriveAuth
-from src.server import create_ftp_server
+from src.server import create_sftp_server
 from src.utils import Config, setup_logger
 
 
 def main():
-    """Main function to start the FTP server"""
+    """Main function to start the SFTP server"""
     print("=" * 60)
-    print("Google Drive as FTP Server")
+    print("Google Drive as SFTP Server")
     print("=" * 60)
     print()
     
@@ -21,7 +21,7 @@ def main():
     
     # Setup logger
     logger = setup_logger(
-        name='gdrive-ftp',
+        name='gdrive-sftp',
         log_file=config.log_file,
         log_level=config.log_level
     )
@@ -60,33 +60,28 @@ def main():
         print(f"✗ Authentication failed: {e}")
         sys.exit(1)
     
-    # Create and start FTP server
-    logger.info(f"Starting FTP server on {config.ftp_host}:{config.ftp_port}...")
-    print(f"\nStarting FTP server on {config.ftp_host}:{config.ftp_port}...")
+    # Create and start SFTP server
+    logger.info(f"Starting SFTP server on {config.sftp_host}:{config.sftp_port}...")
+    print(f"\nStarting SFTP server on {config.sftp_host}:{config.sftp_port}...")
     try:
-        server = create_ftp_server(
-            config.ftp_host,
-            config.ftp_port,
-            config.ftp_username,
-            config.ftp_password,
+        server = create_sftp_server(
+            config.sftp_host,
+            config.sftp_port,
+            config.sftp_username,
+            config.sftp_password,
             gdrive_service,
             cache_timeout=config.cache_timeout,
-            root_path=config.ftp_root_path,
-            passive_address=config.ftp_passive_address,
-            passive_ports=config.ftp_passive_ports
+            root_path=config.sftp_root_path,
+            host_key_path=config.sftp_host_key
         )
         
-        # Set server limits
-        server.max_cons = config.ftp_max_connections
-        server.max_cons_per_ip = config.ftp_max_connections_per_ip
-        
-        logger.info("FTP server started successfully")
-        print("✓ FTP server started successfully!")
-        print(f"\nYou can now connect to the FTP server:")
-        print(f"  Host: {config.ftp_host if config.ftp_host != '0.0.0.0' else 'localhost'}")
-        print(f"  Port: {config.ftp_port}")
-        print(f"  Username: {config.ftp_username}")
-        print(f"  Password: {config.ftp_password}")
+        logger.info("SFTP server started successfully")
+        print("✓ SFTP server started successfully!")
+        print(f"\nYou can now connect to the SFTP server:")
+        print(f"  Host: {config.sftp_host if config.sftp_host != '0.0.0.0' else 'localhost'}")
+        print(f"  Port: {config.sftp_port}")
+        print(f"  Username: {config.sftp_username}")
+        print(f"  Password: {config.sftp_password}")
         print(f"\nLogs are being written to: {config.log_file}")
         print("\nPress Ctrl+C to stop the server")
         print("=" * 60)

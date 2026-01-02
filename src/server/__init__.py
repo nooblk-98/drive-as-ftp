@@ -1,7 +1,7 @@
 """
-FTP Server module
+SFTP Server module
 """
 
-from .ftp_server import create_ftp_server
+from .sftp_server import create_sftp_server
 
-__all__ = ['create_ftp_server']
+__all__ = ['create_sftp_server']

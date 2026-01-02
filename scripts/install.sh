@@ -62,7 +62,7 @@ python3 -m venv "$VENV_DIR"
 
 cat > "$SERVICE_FILE" <<EOF
 [Unit]
-Description=Drive-as-FTP server
+Description=Drive-as-SFTP server
 After=network.target
 
 [Service]
@@ -111,7 +111,7 @@ auth_only() {
 
 while true; do
   echo ""
-  echo "DriveFTP menu"
+  echo "DriveSFTP menu"
   echo "1) Start service"
   echo "2) Stop service"
   echo "3) Authenticate (console)"
