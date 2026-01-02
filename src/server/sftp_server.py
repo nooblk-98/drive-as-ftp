@@ -123,6 +123,14 @@ class _GoogleDriveSFTPInterface(paramiko.SFTPServerInterface):
         path = self._normalize(path)
         return paramiko.SFTP_OK if self.gdrive_fs.delete_file(path) else paramiko.SFTP_FAILURE
 
+    def setstat(self, path, attr):
+        # Ignore chmod/utime requests to avoid client errors.
+        return paramiko.SFTP_OK
+
+    def fsetstat(self, handle, attr):
+        # Ignore chmod/utime requests to avoid client errors.
+        return paramiko.SFTP_OK
+
 
 class _PasswordAuthServer(paramiko.ServerInterface):
     def __init__(self, username, password, gdrive_fs):
