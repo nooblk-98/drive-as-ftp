@@ -110,7 +110,8 @@ sudo bash scripts/install.sh
 Direct install:
 
 ```bash
-curl -fsSL https://raw.githubusercontent.com/nooblk-98/drive-as-ftp/refs/heads/main/scripts/install.sh | sudo bash
+curl -fsSL "https://raw.githubusercontent.com/nooblk-98/drive-as-ftp/refs/heads/main/scripts/install.sh" | sudo bash
+
 ```
 
 Note: the direct install uses `git` to clone the repo on the server.

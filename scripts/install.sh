@@ -105,6 +105,10 @@ run_as_service_user() {
   fi
 }
 
+auth_only() {
+  run_as_service_user "cd $APP_DIR && OAUTH_CONSOLE=true $VENV_DIR/bin/python - <<'PY'\nfrom src.auth import GoogleDriveAuth\nfrom src.utils.config import Config\ncfg = Config()\nauth = GoogleDriveAuth(cfg.credentials_file, cfg.token_file)\nauth.authenticate()\nprint('Authentication complete')\nPY"
+}
+
 while true; do
   echo ""
   echo "DriveFTP menu"
@@ -123,6 +127,20 @@ while true; do
 
   case "$choice" in
     1)
+      if [[ ! -f "$APP_DIR/credentials.json" ]]; then
+        echo "Missing credentials.json in $APP_DIR."
+        echo "Paste the full credentials.json content now, then press Ctrl-D."
+        run_root bash -c "cat > \"$APP_DIR/credentials.json\""
+        run_root chown "$SERVICE_USER:$SERVICE_USER" "$APP_DIR/credentials.json"
+      fi
+      if [[ ! -s "$APP_DIR/credentials.json" ]]; then
+        echo "credentials.json is empty. Start aborted."
+        continue
+      fi
+      if [[ ! -f "$APP_DIR/token.json" ]]; then
+        echo "No token.json found. Starting console authentication..."
+        auth_only
+      fi
       run_root systemctl start "$APP_NAME"
       ;;
     2)
@@ -141,7 +159,7 @@ while true; do
         echo "Removing existing token.json"
         run_root rm -f "$APP_DIR/token.json"
       fi
-      run_as_service_user "cd $APP_DIR && OAUTH_CONSOLE=true $VENV_DIR/bin/python main.py"
+      auth_only
       ;;
     4)
       run_root systemctl status "$APP_NAME" --no-pager
