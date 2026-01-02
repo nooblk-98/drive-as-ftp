@@ -85,33 +85,6 @@ sftp -P 2121 admin@localhost
 2. Enter the connection details in the Quickconnect bar
 3. Click "Quickconnect"
 
-## Project Structure
-
-```
-drive-as-ftp/
-├── main.py                           # Main application entry point
-├── src/                              # Source code directory
-│   ├── __init__.py                   # Package initialization
-│   ├── auth/                         # Authentication module
-│   │   ├── __init__.py
-│   │   └── gdrive_auth.py           # Google Drive OAuth2 authentication
-│   ├── filesystem/                   # Filesystem module
-│   │   ├── __init__.py
-│   │   └── gdrive_filesystem.py     # Google Drive filesystem operations
-│   ├── server/                       # SFTP Server module
-│   │   ├── __init__.py
-│   │   └── sftp_server.py            # SFTP server implementation
-│   └── utils/                        # Utility modules
-│       ├── __init__.py
-│       ├── config.py                # Configuration management
-│       └── logger.py                # Logging utilities
-├── config/                           # Configuration directory
-├── logs/                             # Log files directory
-├── requirements.txt                  # Python dependencies
-├── .env.example                     # Environment variables template
-├── .gitignore                       # Git ignore rules
-└── README.md                        # This file
-```
 
 ## How It Works
 
